@@ -47,7 +47,7 @@ class M3UParser {
                     m3UPlaylist.playlistParams= "No Params"
                 }
             } else {
-                val playlistItem = M3UItem()
+                val playlistItem = M3UItem("BNT1", "Канал 1", "http://play.3mux.ml/555abc333abc/4001", "Политематични")
                 val dataArray = currLine.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 if (dataArray[0].contains(EXT_TITLE)) {
                     val chID_ = dataArray[0].substring(0, dataArray[0].indexOf(EXT_TITLE)).replace(":", "").replace("\n", "")

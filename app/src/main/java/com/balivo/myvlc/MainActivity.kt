@@ -29,7 +29,7 @@ class MainActivity : Activity() {
     val parser = M3UParser()
     var playlist: M3UPlaylist?=null
 
-    var listOfChannels=ArrayList<M3UItem>()
+   // var listOfChannels=ArrayList<M3UItem>()
     var adapter:ChannelAdapter?=null
 
     internal var mPlayingVideo = false // Don't destroy libVLC if the video activity is playing.
@@ -104,12 +104,12 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Load Playlist from url -  channels
-        val url = "http://play.3mux.ml/555abc333abc"
-        MyAsyncTask().execute(url)
 
-        /*    // Load dummy channels
-        listOfChannels.add(Channel("Канал 1", "Денят започва с култура", R.drawable.bnt1,"4001"))
+           // Load dummy channels
+       /* listOfChannels.add(M3UItem("BNT1", "Канал 1", "http://play.3mux.ml/555abc333abc/4001", "Политематични"))
+        listOfChannels.add(M3UItem("bTV","bTV","http://play.3mux.ml/555abc333abc/4002", "Политематични" ))
+        listOfChannels.add(M3UItem("Nova","Nova TV","http://play.3mux.ml/555abc333abc/4003", "Политематични" ))
+        listOfChannels.add(M3UItem("HBO1","HBO 1","http://play.3mux.ml/555abc333abc/5232", "Филми" ))
         listOfChannels.add(Channel("bTV", "Черешката на тортата", R.drawable.btv,"4002"))
         listOfChannels.add(Channel("Nova", "Господари на ефира", R.drawable.novatv,"4003"))
         listOfChannels.add(Channel("HBO 1", "Терминатор 3", R.drawable.hbo,"5232"))
@@ -130,10 +130,17 @@ class MainActivity : Activity() {
             finish()
         }
 
+        // Load Playlist from url -  channels
+        val url = "http://play.3mux.ml/555abc333abc"
+        if (listOfChannels.size==0) {
+            MyAsyncTask().execute(url)
+        }else {
             Toast.makeText(this, listOfChannels.size.toString(), Toast.LENGTH_LONG).show()
             adapter = ChannelAdapter(this, listOfChannels)
             lvListChannel.adapter = adapter
+            }
 
+        
 //        val intent = Intent(this@MainActivity, VideoActivity::class.java)
 //        //intent.putExtra(VideoActivity.LOCATION, "http://dl.strem.io/BigBuckBunny_512kb.mp4");
 //        // http://play.3mux.ml/555abc333abc/4380
@@ -158,35 +165,32 @@ class MainActivity : Activity() {
                 val urlConnect=url.openConnection() as HttpURLConnection
                 urlConnect.connectTimeout=7000
 
-
-
                 var inString= ConvertStreamToString(urlConnect.inputStream)
 
-
-                // return inString
                 //Cannot access to ui
-                //publishProgress(inString)
+                publishProgress(inString)
             }catch (ex:Exception){}
 
-
             return " "
-
         }
 
         override fun onProgressUpdate(vararg values: String?) {
+
+                playlist = parser.parseFile(values!![0].toString())
+
+                //listOfChannels. = playlist!!.playlistItems as ArrayList<M3UItem>
+                //Log.d("List of Channels: ", listOfChannels.toString())
+            listOfChannels.addAll(playlist!!.playlistItems as ArrayList<M3UItem>)
+
+            Toast.makeText(this@MainActivity, listOfChannels.size.toString(), Toast.LENGTH_LONG).show()
+            adapter = ChannelAdapter(this@MainActivity, listOfChannels)
+            lvListChannel.adapter = adapter
 
         }
 
         override fun onPostExecute(result: String?) {
 
             //after task done
-
-            try {
-                playlist = parser.parseFile(result!![0].toString())
-
-                listOfChannels = playlist!!.playlistItems as ArrayList<M3UItem>
-
-            }catch (ex:Exception){}
         }
 
 
@@ -235,6 +239,7 @@ class MainActivity : Activity() {
     }
 
     companion object {
+        var listOfChannels=ArrayList<M3UItem>()
         val urlIPTV = "http://play.3mux.ml/555abc333abc/"
         val TAG = "MyVlc/MainActivity"
     }
