@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.*
 import android.widget.BaseAdapter
 import android.widget.Toast
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.channel_ticket.view.*
 import org.videolan.libvlc.LibVLC
@@ -18,6 +19,7 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
+import java.net.URI
 import java.net.URL
 
 class MainActivity : Activity() {
@@ -55,6 +57,12 @@ class MainActivity : Activity() {
         mMediaPlayer!!.play()
     }
 
+    fun getChID(channel: String):Int {
+
+        val id = getResources().getIdentifier(channel, "drawable", getPackageName())
+        return id
+    }
+
     class ChannelAdapter:BaseAdapter{
 
         //var listOfChannels=ArrayList<Channel>()
@@ -73,10 +81,57 @@ class MainActivity : Activity() {
             var myView = inflator.inflate(R.layout.channel_ticket, null)
             myView.tvName.text = channel.itemName.toString()
             myView.tvDes.text = channel.itemTitle.toString()
-            myView.ivImage.setImageResource(R.drawable.iptv)
+
+            //Check google for Picasso Android!!!
+            // Add to build.gradle: [compile 'com.squareup.picasso:picasso:2.5.2']
+
+            var chLogo = ""
+
+            when(channel.itemID.trim().toLowerCase()){
+                "nova" -> chLogo ="http://logos.kodibg.org/novatv.png"
+                "eurocom" -> chLogo ="http://logos.kodibg.org/evrokom.png"
+                "tveurope" -> chLogo ="http://logos.kodibg.org/tveuropa.png"
+                "comedycentral" -> chLogo ="http://logos.kodibg.org/comedycentralextra.png"
+                "bulgariaonair" -> chLogo ="http://logos.kodibg.org/bgonair.png"
+                "filmboxarthousehd" -> chLogo ="http://logos.kodibg.org/filmboxarthouse.png"
+                "hbohd"  -> chLogo ="http://logos.kodibg.org/hbo.png"
+
+                else -> chLogo = "http://logos.kodibg.org/" + channel.itemID.trim().toLowerCase() + ".png"
+            }
+
+            when(channel.itemName.trim().toLowerCase()){
+                "nktv evrokom" -> chLogo ="http://logos.kodibg.org/evrokom.png"
+                "diva universal" -> chLogo ="http://logos.kodibg.org/diva.png"
+            }
+/*
+
+            if(channel.itemID =="Nova") {
+                chLogo ="http://logos.kodibg.org/novatv.png"
+            }else if(channel.itemID =="BulgariaOnAir") {
+                chLogo ="http://logos.kodibg.org/bgonair.png"
+            }
+
+            else {
+            chLogo = "http://logos.kodibg.org/" + channel.itemID.trim().toLowerCase() + ".png"}
+            */
+
+            Log.d("Channel Logos URL: ", channel.itemID)
+
+            Picasso.with(context)
+                    .load(chLogo)
+                    .placeholder(R.drawable.iptv)
+                    .error(R.drawable.iptv)
+                    //.resize(900,0)
+                    //.resize(50, 50)
+                    //.centerCrop()
+                    .fit()
+                    //.rotate(270F)
+                    .into(myView.ivImage)
+
+
             myView.linearLayoutID.setOnClickListener{
                 val intent = Intent(context, VideoActivity::class.java)
-                intent.putExtra(VideoActivity.LOCATION, channel.itemUrl.toString())
+                intent.putExtra(VideoActivity.LOCATION, channel.itemUrl)
                 context!!.startActivity(intent)
 
             }
