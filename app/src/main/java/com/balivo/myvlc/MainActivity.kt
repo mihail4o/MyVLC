@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.*
 import android.widget.BaseAdapter
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.channel_ticket.view.*
@@ -113,26 +114,15 @@ class MainActivity : Activity() {
                 "mat4! hd" -> chLogo = "https://getsiptv.ru/img/ch_icons/match_tv.png"
                 "boec" -> chLogo = "http://tivix.co/uploads/posts/2014-02/1392653251_boets.png"
             }
-/*
 
-            if(channel.itemID =="Nova") {
-                chLogo ="http://logos.kodibg.org/novatv.png"
-            }else if(channel.itemID =="BulgariaOnAir") {
-                chLogo ="http://logos.kodibg.org/bgonair.png"
-            }
+// TODO: Remove Picasso module from Gradle, when done!
 
-            else {
-            chLogo = "http://logos.kodibg.org/" + channel.itemID.trim().toLowerCase() + ".png"}
-            */
-
-            Log.d("Channel Logos URL: ", channel.itemID)
-
-            Picasso.with(context)
+            Glide.with(context!!)
                     .load(chLogo)
                     //.placeholder(R.drawable.iptv)
-                    .error(R.drawable.iptv)
+                    //.error(R.drawable.iptv)
                     //.resize(900,0)
-                    .resize(50, 50)
+                    //.resize(50, 50)
                     //.centerCrop()
                     //.fit()
                     //.rotate(270F)
