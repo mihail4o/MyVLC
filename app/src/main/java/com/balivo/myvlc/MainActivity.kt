@@ -95,6 +95,7 @@ class MainActivity : Activity() {
                 "bulgariaonair" -> chLogo ="http://logos.kodibg.org/bgonair.png"
                 "filmboxarthousehd" -> chLogo ="http://logos.kodibg.org/filmboxarthouse.png"
                 "hbohd"  -> chLogo ="http://logos.kodibg.org/hbo.png"
+                "eurosport1"-> chLogo ="http://logos.kodibg.org/eurosport.png"
 
                 else -> chLogo = "http://logos.kodibg.org/" + channel.itemID.trim().toLowerCase() + ".png"
             }
@@ -102,6 +103,15 @@ class MainActivity : Activity() {
             when(channel.itemName.trim().toLowerCase()){
                 "nktv evrokom" -> chLogo ="http://logos.kodibg.org/evrokom.png"
                 "diva universal" -> chLogo ="http://logos.kodibg.org/diva.png"
+                "kanal 4" -> chLogo ="http://logos.kodibg.org/kanal4.png"
+                "moviestar" -> chLogo ="http://logos.kodibg.org/moviestar.png"
+                "arena sport 1" -> chLogo ="http://www.tvarenasport.com/images/logo-arenaA1.png"
+                "arena sport 2" -> chLogo ="http://www.tvarenasport.com/images/logo-arenaA2.png"
+                "arena sport 3" -> chLogo ="http://www.tvarenasport.com/images/logo-arenaA3.png"
+                "arena sport 4" -> chLogo ="http://www.tvarenasport.com/images/logo-arenaA4.png"
+                "arena sport 5" -> chLogo ="http://www.tvarenasport.com/images/logo-arenaA5.png"
+                "mat4! hd" -> chLogo = "https://getsiptv.ru/img/ch_icons/match_tv.png"
+                "boec" -> chLogo = "http://tivix.co/uploads/posts/2014-02/1392653251_boets.png"
             }
 /*
 
@@ -119,12 +129,12 @@ class MainActivity : Activity() {
 
             Picasso.with(context)
                     .load(chLogo)
-                    .placeholder(R.drawable.iptv)
+                    //.placeholder(R.drawable.iptv)
                     .error(R.drawable.iptv)
                     //.resize(900,0)
-                    //.resize(50, 50)
+                    .resize(50, 50)
                     //.centerCrop()
-                    .fit()
+                    //.fit()
                     //.rotate(270F)
                     .into(myView.ivImage)
 
